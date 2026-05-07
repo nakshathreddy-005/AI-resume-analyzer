@@ -1,0 +1,23 @@
+
+### upload resumeh
+POST http://localhost:1800/api/resume/upload
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZmIwY2I0NTNmMThhYzMyOTAzMmE0NiIsImlhdCI6MTc3ODEyNzQxNSwiZXhwIjoxNzc4NzMyMjE1fQ.Bw58dtHT3vpUSfW-5_weHUkrg4nII3xcC1N5XiS8j1Q
+Content-Type: multipart/form-data; boundary=----Boundary
+
+------Boundary
+Content-Disposition: form-data; name="resume"; filename="Harish.Resume1.pdf"
+Content-Type: application/pdf
+
+< C:\Harish.cer\Harish.Resume1.pdf
+------Boundary--
+
+
+###get all resumes
+GET  http://localhost:1800/api/resume/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZmIwY2I0NTNmMThhYzMyOTAzMmE0NiIsImlhdCI6MTc3ODEzMDY0MCwiZXhwIjoxNzc4NzM1NDQwfQ.e56YYDuJdPxdF2WKUMgef1uqsIaNWsivRHMBp2wDhz8
+
+
+### get resume by id
+GET http://localhost:1800/api/resume/69fc1a88b3911be4cef5a5f4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZmIwY2I0NTNmMThhYzMyOTAzMmE0NiIsImlhdCI6MTc3ODEzMDY0MCwiZXhwIjoxNzc4NzM1NDQwfQ.e56YYDuJdPxdF2WKUMgef1uqsIaNWsivRHMBp2wDhz8
+

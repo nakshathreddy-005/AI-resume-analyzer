@@ -1,5 +1,6 @@
 import Job from "../models/jobModel.js";
 
+// Create job
 export const createJob = async (req, res) => {
     try {
         const { title, company, description, requiredSkills, location } = req.body;
@@ -18,6 +19,8 @@ export const createJob = async (req, res) => {
         res.status(500).json({ message: "Job creation failed" });
     }
 };
+
+// Get all jobs
 export const getJobs = async (req, res) => {
     try {
         const jobs = await Job.find();
@@ -27,6 +30,7 @@ export const getJobs = async (req, res) => {
     }
 };
 
+//Get single job
 export const getJobById = async (req, res) => {
     try {
         const job = await Job.findById(req.params.id);

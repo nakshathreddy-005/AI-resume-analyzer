@@ -1,7 +1,9 @@
- import Resume from "../models/resumeModel.js";
+import Resume from "../models/resumeModel.js";
 import OpenAI from "openai";
 import fs from "fs";
-import pdfParse from "pdf-parse";
+import * as pdfParseModule from "pdf-parse";
+
+const pdfParse = pdfParseModule.default || pdfParseModule;
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -45,7 +47,7 @@ Analyze this resume.
 ${jobRole ? `Focus more on this role: ${jobRole}` : ""}
 
 Give:
-1. ATS score (0–100)
+1. ATS score (0-100)
 2. 3 improvement suggestions
 3. Top 3 suitable job roles
 4. Match score for each role

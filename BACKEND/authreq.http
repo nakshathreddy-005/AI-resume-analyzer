@@ -1,0 +1,24 @@
+
+### register
+POST http://localhost:1800/api/auth/register
+Content-Type: application/json
+
+{ 
+    "username": "Harish", 
+    "email": "harish@gmail.com", 
+    "password": "123456"
+}
+
+### login
+POST http://localhost:1800/api/auth/login
+Content-Type: application/json
+
+{ 
+    "email": "harish@gmail.com",
+    "password": "123456"
+}
+
+
+### get current user
+GET http://localhost:1800/api/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZmIwY2I0NTNmMThhYzMyOTAzMmE0NiIsImlhdCI6MTc3ODA2MDQ3OSwiZXhwIjoxNzc4NjY1Mjc5fQ.0EGXvxJaPD2DSisqBUNVmQuW2kdiS5E_-PL07kKAqg4

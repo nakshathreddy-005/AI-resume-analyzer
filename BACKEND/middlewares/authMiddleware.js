@@ -1,29 +1,36 @@
 import jwt from "jsonwebtoken";
-import { config } from "dotenv";
-const { verify } = jwt;
-config();
+import {userModel} from "../models/userModel.js";
 
-export const verifyToken = () => {
-  return (req, res, next) => {
-    try {
-      //get token from cookie
-      const token = req.cookies?.token; // { token : asdasd}
-      //check token existed or not
-      if (!token) {
-        return res.status(401).json({ message: "Please login first" });
-      }
-      //validate token(decode the token)
-      let decodedToken = verify(token, process.env.SECRET_KEY);
+const authMiddleware = async (req, res, next) => {
+    let token;
 
-      // check the role is same as role in decodedToken
-      if (!allowedRoles.includes(decodedToken.role)) {
-        return res.status(403).json({ message: "You are not authorized" });
-      }
-      //add decoded token
-      req.user = decodedToken;
-      next();
-    } catch (err) {
-      res.status(401).json({ message: "Invalid token" });
+    // Check Authorization header
+    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+        try {
+            // Get token
+            token = req.headers.authorization.split(" ")[1];
+
+            // Verify token
+            const decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+            // Attach user (exclude password)
+            req.user = await userModel.findById(decoded.id).select("-password");
+
+            if (!req.user) {
+                return res.status(401).json({ message: "User not found" });
+            }
+
+            next();
+        } catch (error) {
+            console.log("Token error:", error.message); // ← add this
+            return res.status(401).json({ message: error.message }); 
+            return res.status(401).json({ message: "Not authorized, token failed" });
+        }
     }
-  };
+
+    if (!token) {
+        return res.status(401).json({ message: "No token, authorization denied" });
+    }
 };
+
+export default authMiddleware;

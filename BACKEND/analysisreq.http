@@ -1,0 +1,9 @@
+
+###Analysis od pdf by openAI
+POST http://localhost:1800/api/analysis/69fc1a88b3911be4cef5a5f4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZmIwY2I0NTNmMThhYzMyOTAzMmE0NiIsImlhdCI6MTc3ODEzMDY0MCwiZXhwIjoxNzc4NzM1NDQwfQ.e56YYDuJdPxdF2WKUMgef1uqsIaNWsivRHMBp2wDhz8
+Content-Type: application/json
+
+{
+
+}

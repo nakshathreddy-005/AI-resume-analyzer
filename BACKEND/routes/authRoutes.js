@@ -1,7 +1,16 @@
-import exp from 'express'
-import { userModel } from '../models/userModel.js'
-import {registeredUser} from "../controllers/authController.js"
+import express from "express";
+import { registerUser, loginUser, getMe } from "../controllers/authController.js";
+import authMiddleware from "../middlewares/authMiddleware.js";
 
-export const authApp = exp.Router();
+const router = express.Router();
 
-authApp.post("/register",registereduser)
+// Register
+router.post("/register", registerUser);
+
+// Login
+router.post("/login", loginUser);
+
+// Get current logged-in user (protected)
+router.get("/me", authMiddleware, getMe);
+
+export default router;

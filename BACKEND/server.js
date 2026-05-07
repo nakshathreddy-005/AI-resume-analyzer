@@ -14,6 +14,7 @@ const app = exp()
 app.use(cors());
 
 app.use(exp.json())
+config()
 
 // Routes
 app.use("/api/auth", authRoute);

@@ -1,50 +1,107 @@
+ // controllers/analysisController.js
+
+// controllers/analysisController.js
+
 import Resume from "../models/resumeModel.js";
-import OpenAI from "openai";
-import fs from "fs";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import * as pdfParseModule from "pdf-parse";
 
-const pdfParse = pdfParseModule.default || pdfParseModule;
+const pdfParse =
+    pdfParseModule.default || pdfParseModule;
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize Gemini AI
+const genAI = new GoogleGenerativeAI(
+    process.env.GEMINI_API_KEY
+);
 
 export const analyzeResume = async (req, res) => {
     try {
         const { resumeId } = req.params;
-        const { jobRole } = req.body; // optional
+        const { jobRole } = req.body;
 
-        // 1. Get resume from DB
-        const resume = await Resume.findById(resumeId);
+        // 1. Find resume
+        const resume = await Resume.findById(
+            resumeId
+        );
 
         if (!resume) {
-            return res.status(404).json({ message: "Resume not found" });
+            return res.status(404).json({
+                success: false,
+                message: "Resume not found",
+            });
         }
 
-        // 2. Read file
-        const dataBuffer = await fs.promises.readFile(resume.fileUrl);
+        // 2. Fetch PDF from Cloudinary URL
+        const response = await fetch(
+            resume.fileUrl
+        );
 
-        // 3. Extract text from PDF
-        const pdfData = await pdfParse(dataBuffer);
+        if (!response.ok) {
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Failed to fetch resume PDF",
+            });
+        }
 
-        // limit text size (important)
-        const resumeText = pdfData.text.slice(0, 5000);
+        // 3. Validate content type
+        const contentType =
+            response.headers.get(
+                "content-type"
+            );
 
-        // 4. Send to OpenAI
-        const response = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            response_format: { type: "json_object" },
-            messages: [
-                {
-                    role: "system",
-                    content: "You are an advanced ATS resume analyzer.",
-                },
-                {
-                    role: "user",
-                    content: `
-Analyze this resume.
+        console.log(
+            "PDF Content-Type:",
+            contentType
+        );
 
-${jobRole ? `Focus more on this role: ${jobRole}` : ""}
+        if (
+            !contentType ||
+            !contentType.includes("pdf")
+        ) {
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Uploaded file is not a valid PDF",
+            });
+        }
+
+        // 4. Convert response to buffer
+        const arrayBuffer =
+            await response.arrayBuffer();
+
+        const dataBuffer = Buffer.from(
+            arrayBuffer
+        );
+
+        // 5. Extract text from PDF
+        const pdfData = await pdfParse(
+            dataBuffer
+        );
+
+        // 6. Clean and limit text size
+        const resumeText = pdfData.text
+            .replace(/\s+/g, " ")
+            .trim()
+            .slice(0, 5000);
+
+        // 7. Gemini model
+        const model =
+            genAI.getGenerativeModel({
+                model: "gemini-1.5-flash",
+            });
+
+        // 8. Prompt
+        const prompt = `
+You are an advanced ATS Resume Analyzer.
+
+Analyze this resume carefully.
+
+${
+    jobRole
+        ? `Target Role: ${jobRole}`
+        : ""
+}
 
 Give:
 1. ATS score (0-100)
@@ -54,7 +111,8 @@ Give:
 5. Missing skills for each role
 6. Short reason for each role match
 
-Return JSON:
+Return ONLY valid JSON in this exact format:
+
 {
   "atsScore": number,
   "suggestions": [string],
@@ -70,29 +128,62 @@ Return JSON:
 
 Resume:
 ${resumeText}
-                    `,
-                },
-            ],
-        });
+        `;
 
-        // 5. Parse AI response safely
+        // 9. Generate AI response
+        const result =
+            await model.generateContent(
+                prompt
+            );
+
+        const text =
+            result.response.text();
+
+        // 10. Clean markdown formatting
+        const cleanText = text
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
+
+        // 11. Parse JSON safely
         let analysis;
+
         try {
-            analysis = JSON.parse(response.choices[0].message.content);
-        } catch (err) {
-            return res.status(500).json({ message: "Invalid AI response format" });
+            analysis = JSON.parse(
+                cleanText
+            );
+        } catch (error) {
+            console.error(
+                "AI JSON Parse Error:",
+                cleanText
+            );
+
+            return res.status(500).json({
+                success: false,
+                message:
+                    "Invalid AI response format",
+            });
         }
 
-        // 6. Optional validation (extra safety)
+        // 12. Validate structure
         if (
-            typeof analysis.atsScore !== "number" ||
-            !Array.isArray(analysis.suggestions) ||
-            !Array.isArray(analysis.recommendedJobs)
+            typeof analysis.atsScore !==
+                "number" ||
+            !Array.isArray(
+                analysis.suggestions
+            ) ||
+            !Array.isArray(
+                analysis.recommendedJobs
+            )
         ) {
-            return res.status(500).json({ message: "AI returned unexpected structure" });
+            return res.status(500).json({
+                success: false,
+                message:
+                    "AI returned unexpected structure",
+            });
         }
 
-        // 7. Save in DB
+        // 13. Save analysis
         resume.analysis = {
             ...analysis,
             roleFocus: jobRole || null,
@@ -100,11 +191,23 @@ ${resumeText}
 
         await resume.save();
 
-        // 8. Send response
-        res.json(resume.analysis);
+        // 14. Return response
+        return res.status(200).json({
+            success: true,
+            data: resume.analysis,
+        });
 
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Analysis failed" });
+    } catch (error) {
+        console.error(
+            "Resume Analysis Error:",
+            error
+        );
+
+        return res.status(500).json({
+            success: false,
+            message:
+                error.message ||
+                "Analysis failed",
+        });
     }
 };

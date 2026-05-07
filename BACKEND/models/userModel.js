@@ -8,15 +8,15 @@ const userSchema = new Schema({
         minLength:[4,"Minimum 4 characters"],
         maxLength:[15,"Shouldnt exceed 15 characters"]
         },
-       password:{
-        type:String,
-        required:[true,"password is required"]
-         },
       email:{
             type:String,
             required:[true,"email is required"],
             unique:[true,"Email already exists"]
-      }     
+      },
+       password:{
+        type:String,
+        required:[true,"password is required"]
+         },    
 
 },
 {

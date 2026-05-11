@@ -1,0 +1,6 @@
+◇ injected env (7) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+DB server connected
+server listening on 1800..
+PDF Content-Type: application/octet-stream

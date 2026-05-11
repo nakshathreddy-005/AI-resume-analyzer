@@ -10,6 +10,17 @@ export const uploadResume = async (req, res) => {
             return res.status(400).json({ message: "No file uploaded" });
         }
 
+        if (
+            file.buffer
+                .subarray(0, 5)
+                .toString() !== "%PDF-"
+        ) {
+            return res.status(400).json({
+                message:
+                    "Invalid PDF upload. Check the file path in resumereq.http.",
+            });
+        }
+
         //upload buffer to Cloudinary
         const cloudinaryResult = await uploadToCloudinary(file.buffer);
 

@@ -1,14 +1,14 @@
 
 ### upload resumeh
 POST http://localhost:1800/api/resume/upload
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZmM2MzVjM2JmNWUxZjc3OTNhYjY2YSIsImlhdCI6MTc3ODE0ODE4OSwiZXhwIjoxNzc4NzUyOTg5fQ.mL13Zur8oHAOnuC-24dhexuKTvkfaoOkCIx2XWDjwGw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDFhNWE5M2EzZDllNzE5ZDQ1NDM2ZSIsImlhdCI6MTc3ODQ5Mjg2NiwiZXhwIjoxNzc5MDk3NjY2fQ.ON_u_gWUQWoBFZMb57g5bOtiq6RiiDp9TsD9ILRGN38
 Content-Type: multipart/form-data; boundary=----Boundary
 
 ------Boundary
-Content-Disposition: form-data; name="resume"; filename="Harish.Resume1.pdf"
+Content-Disposition: form-data; name="resume"; filename="pavithra.Resume1.pdf"
 Content-Type: application/pdf
 
-< C:\Harish.cer\Harish.Resume1.pdf
+< C:\Users\DELL\Downloads\resume1 (4).pdf
 ------Boundary--
 
 

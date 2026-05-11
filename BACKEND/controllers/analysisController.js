@@ -1,23 +1,26 @@
- // controllers/analysisController.js
-
 // controllers/analysisController.js
 
 import Resume from "../models/resumeModel.js";
+import Job from "../models/jobmodel.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import * as pdfParseModule from "pdf-parse";
-
-const pdfParse =
-    pdfParseModule.default || pdfParseModule;
-
-// Initialize Gemini AI
-const genAI = new GoogleGenerativeAI(
-    process.env.GEMINI_API_KEY
-);
+import { PDFParse } from "pdf-parse";
 
 export const analyzeResume = async (req, res) => {
     try {
         const { resumeId } = req.params;
         const { jobRole } = req.body;
+
+        if (!process.env.GEMINI_API_KEY) {
+            return res.status(500).json({
+                success: false,
+                message: "GEMINI_API_KEY is not configured",
+            });
+        }
+
+        // Initialize after dotenv has loaded in server.js.
+        const genAI = new GoogleGenerativeAI(
+            process.env.GEMINI_API_KEY
+        );
 
         // 1. Find resume
         const resume = await Resume.findById(
@@ -28,6 +31,17 @@ export const analyzeResume = async (req, res) => {
             return res.status(404).json({
                 success: false,
                 message: "Resume not found",
+            });
+        }
+
+        if (
+            resume.user.toString() !==
+            req.user._id.toString()
+        ) {
+            return res.status(403).json({
+                success: false,
+                message:
+                    "You are not allowed to analyze this resume",
             });
         }
 
@@ -44,7 +58,8 @@ export const analyzeResume = async (req, res) => {
             });
         }
 
-        // 3. Validate content type
+        // 3. Log content type. Cloudinary raw uploads often return
+        // application/octet-stream even for valid PDFs.
         const contentType =
             response.headers.get(
                 "content-type"
@@ -55,17 +70,6 @@ export const analyzeResume = async (req, res) => {
             contentType
         );
 
-        if (
-            !contentType ||
-            !contentType.includes("pdf")
-        ) {
-            return res.status(400).json({
-                success: false,
-                message:
-                    "Uploaded file is not a valid PDF",
-            });
-        }
-
         // 4. Convert response to buffer
         const arrayBuffer =
             await response.arrayBuffer();
@@ -74,10 +78,24 @@ export const analyzeResume = async (req, res) => {
             arrayBuffer
         );
 
-        // 5. Extract text from PDF
-        const pdfData = await pdfParse(
+        if (
             dataBuffer
-        );
+                .subarray(0, 5)
+                .toString() !== "%PDF-"
+        ) {
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Uploaded file is not a valid PDF",
+            });
+        }
+
+        // 5. Extract text from PDF
+        const parser = new PDFParse({
+            data: dataBuffer,
+        });
+        const pdfData = await parser.getText();
+        await parser.destroy();
 
         // 6. Clean and limit text size
         const resumeText = pdfData.text
@@ -85,10 +103,20 @@ export const analyzeResume = async (req, res) => {
             .trim()
             .slice(0, 5000);
 
+        if (!resumeText) {
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Could not extract text from the PDF",
+            });
+        }
+
         // 7. Gemini model
         const model =
             genAI.getGenerativeModel({
-                model: "gemini-1.5-flash",
+                model:
+                    process.env.GEMINI_MODEL ||
+                    "gemini-2.5-flash",
             });
 
         // 8. Prompt
@@ -191,10 +219,32 @@ ${resumeText}
 
         await resume.save();
 
+        const recommendedJobs =
+            analysis.recommendedJobs.map((job) => ({
+                resume: resume._id,
+                user: req.user._id,
+                role: job.role,
+                matchScore: job.matchScore,
+                missingSkills:
+                    job.missingSkills || [],
+                reason: job.reason,
+                roleFocus: jobRole || null,
+            }));
+
+        await Job.deleteMany({
+            resume: resume._id,
+        });
+
+        const savedJobs =
+            await Job.insertMany(
+                recommendedJobs
+            );
+
         // 14. Return response
         return res.status(200).json({
             success: true,
             data: resume.analysis,
+            jobs: savedJobs,
         });
 
     } catch (error) {

@@ -43,6 +43,11 @@ const analysisSchema = new mongoose.Schema({
 
 // Main resume schema
 const resumeSchema = new mongoose.Schema({
+    fileName: {
+        type: String,
+        required: true,
+    },
+
     fileUrl: {
         type: String,
         required: true,

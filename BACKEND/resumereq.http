@@ -1,7 +1,7 @@
 
 ### upload resumeh
 POST http://localhost:1800/api/resume/upload
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDFhNWE5M2EzZDllNzE5ZDQ1NDM2ZSIsImlhdCI6MTc3ODQ5Mjg2NiwiZXhwIjoxNzc5MDk3NjY2fQ.ON_u_gWUQWoBFZMb57g5bOtiq6RiiDp9TsD9ILRGN38
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDJkYjg0NmFmNjFiNTRkMGNlZmI3MSIsImlhdCI6MTc3ODU3Mjk5NywiZXhwIjoxNzc5MTc3Nzk3fQ.a3NE-9yiFueZqkalH0P3NoNRJKXAKXiEDFFbg6fNN3E
 Content-Type: multipart/form-data; boundary=----Boundary
 
 ------Boundary

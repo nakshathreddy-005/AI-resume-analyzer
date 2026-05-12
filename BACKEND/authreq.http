@@ -1,24 +1,25 @@
+###register
 
-### register
 POST http://localhost:1800/api/auth/register
 Content-Type: application/json
 
 { 
-    "username": "Harish", 
-    "email": "harish@gmail.com", 
+    "username": "nakshatraa", 
+    "email": "nakshatraa@gmail.com", 
     "password": "123456"
 }
 
 ### login
 POST http://localhost:1800/api/auth/login
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDJkYjg0NmFmNjFiNTRkMGNlZmI3MSIsImlhdCI6MTc3ODU3MjE2NCwiZXhwIjoxNzc5MTc2OTY0fQ.bfv13ByJiVDOkaRF2Teig5Ixh-UKEITRB3_s0pX5Z-c
 Content-Type: application/json
 
 { 
-    "email": "harish@gmail.com",
+    "email": "nakshatraa@gmail.com",
     "password": "123456"
 }
 
 
 ### get current user
 GET http://localhost:1800/api/auth/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZmIwY2I0NTNmMThhYzMyOTAzMmE0NiIsImlhdCI6MTc3ODA2MDQ3OSwiZXhwIjoxNzc4NjY1Mjc5fQ.0EGXvxJaPD2DSisqBUNVmQuW2kdiS5E_-PL07kKAqg4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDJkYjg0NmFmNjFiNTRkMGNlZmI3MSIsImlhdCI6MTc3ODU3MjIwMCwiZXhwIjoxNzc5MTc3MDAwfQ.t0Of9_OLQGEs3tSz0KMZ04_FoAuS38yABDesjksg2xE

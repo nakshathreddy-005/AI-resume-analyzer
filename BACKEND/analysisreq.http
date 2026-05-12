@@ -1,7 +1,7 @@
 
 ###Analysis od pdf by openAI
-POST http://localhost:1800/api/analysis/69fc639b3bf5e1f7793ab66b
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZmM2MzVjM2JmNWUxZjc3OTNhYjY2YSIsImlhdCI6MTc3ODE0ODE4OSwiZXhwIjoxNzc4NzUyOTg5fQ.mL13Zur8oHAOnuC-24dhexuKTvkfaoOkCIx2XWDjwGw
+POST http://localhost:1800/api/analysis/6a02ded94a57744c7da0cbfa
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDJkYjg0NmFmNjFiNTRkMGNlZmI3MSIsImlhdCI6MTc3ODU3Mjk5NywiZXhwIjoxNzc5MTc3Nzk3fQ.a3NE-9yiFueZqkalH0P3NoNRJKXAKXiEDFFbg6fNN3E
 Content-Type: application/json
 
 {

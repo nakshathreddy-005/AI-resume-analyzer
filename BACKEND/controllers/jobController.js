@@ -1,16 +1,25 @@
-import Job from "../models/jobModel.js";
+import Job from "../models/jobmodel.js";
 
 // Create job
 export const createJob = async (req, res) => {
     try {
-        const { title, company, description, requiredSkills, location } = req.body;
+        const {
+            resume,
+            role,
+            matchScore,
+            missingSkills,
+            reason,
+            roleFocus,
+        } = req.body;
 
         const job = await Job.create({
-            title,
-            company,
-            description,
-            requiredSkills,
-            location,
+            resume,
+            user: req.user._id,
+            role,
+            matchScore,
+            missingSkills,
+            reason,
+            roleFocus,
         });
 
         res.status(201).json(job);

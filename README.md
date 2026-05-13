@@ -412,7 +412,7 @@ docker-compose up --build
 | Version | Date | Changes |
 |---------|------|---------|
 | `1.3.0` | 2025-10-01 | Download improved resume as PDF/DOCX, Google & LinkedIn OAuth |
-| `1.2.0` | 2025-09-01 | Gemini 1.5 Pro support, resume history diff view |
+| `1.2.0` | 2025-09-01 | Gemini 2.5 Pro support, resume history diff view |
 | `1.1.0` | 2025-08-01 | Job role-based scoring, URL job description fetching |
 | `1.0.0` | 2025-07-01 | Initial release: upload, parse, ATS score, AI suggestions |
 

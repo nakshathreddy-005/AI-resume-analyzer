@@ -4,18 +4,18 @@ POST http://localhost:1800/api/auth/register
 Content-Type: application/json
 
 { 
-    "username": "nakshatraa", 
-    "email": "nakshatraa@gmail.com", 
+    "username": "nakshi", 
+    "email": "nakshi@gmail.com", 
     "password": "123456"
 }
 
 ### login
 POST http://localhost:1800/api/auth/login
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDJkYjg0NmFmNjFiNTRkMGNlZmI3MSIsImlhdCI6MTc3ODU3MjE2NCwiZXhwIjoxNzc5MTc2OTY0fQ.bfv13ByJiVDOkaRF2Teig5Ixh-UKEITRB3_s0pX5Z-c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDJlYjFkNmNjYzdmMThkMDQwZjQ5NSIsImlhdCI6MTc3ODU3NjE1NywiZXhwIjoxNzc5MTgwOTU3fQ.WNYSQ3HJsXYG1WPxCW2uNCa88V-fJHmyyFM0PLy2GeY
 Content-Type: application/json
 
 { 
-    "email": "nakshatraa@gmail.com",
+    "email": "nakshi@gmail.com",
     "password": "123456"
 }
 

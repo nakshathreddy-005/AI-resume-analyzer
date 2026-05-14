@@ -12,7 +12,15 @@ dotenv.config()
 const app = exp()
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://ai-resume-analyzer-b9zyxu8by-nakshathra-s-projects.vercel.app',
+    /\.vercel\.app$/
+  ],
+  credentials: true
+}));
 app.use(exp.json())
 
 // Routes

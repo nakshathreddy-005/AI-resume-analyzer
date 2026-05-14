@@ -1,9 +1,8 @@
-import React from 'react'
+import Home from './components/home.jsx'
+import './App.css'
 
 function App() {
-  return (
-    <div>App</div>
-  )
+  return <Home />
 }
 
 export default App

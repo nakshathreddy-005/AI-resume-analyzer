@@ -1,0 +1,12 @@
+◇ injected env (7) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+DB server connected
+server listening on 1800..
+PDF Content-Type: application/octet-stream
+PDF Content-Type: application/octet-stream
+PDF Content-Type: application/octet-stream
+PDF Content-Type: application/octet-stream
+PDF Content-Type: application/octet-stream
+PDF Content-Type: application/octet-stream
+PDF Content-Type: application/octet-stream

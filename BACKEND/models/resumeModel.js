@@ -38,7 +38,11 @@ const analysisSchema = new mongoose.Schema({
     roleFocus: {
         type: String,
         default: null,
-    }
+    },
+    modifiedResume: {
+        type: String,
+        default: null,
+    },
 }, { _id: false });
 
 // Main resume schema

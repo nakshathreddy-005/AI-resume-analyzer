@@ -12,8 +12,18 @@ function Home() {
   const activePage = analyzer.token ? page : 'credentials'
 
   const handleAuth = async (event) => {
+    const currentMode = analyzer.mode
+
     const didAuthenticate = await analyzer.handleAuth(event)
-    if (didAuthenticate) setPage('analyzer')
+
+    if (didAuthenticate) {
+      if (currentMode === 'register') {
+        analyzer.setMode('login')
+        analyzer.setAuthForm({ username: '', email: '', password: '' })
+      } else {
+        setPage('analyzer')
+      }
+    }
   }
 
   const handleAnalyze = async () => {
